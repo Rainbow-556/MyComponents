@@ -1,0 +1,17 @@
+一、组件如何在library和application之间切换运行？
+    方案 1、在gradle中定义isStandalone布尔值变量，判断切换library和application插件，在独立运行时需要单独提供AndroidManifest文件
+    方案 2、单独写一个moduleXStandalone的application工程去依赖moduleX组件，进行单独运行调试(如果要同时调试多个module，如何做？)
+
+二、组件如何感知主App的生命周期事件(如：主Application的onCreate()、attachBaseContext())，有些组件需要在这些生命周期中做初始化或者释放资源等逻辑？
+    方案 1、每个module都定义一个ModuleXApplication，继承于Application，并在相应的生命周期方法里做相应的逻辑，就好像该ModuleXApplication就是当前
+    运行时的Application，结合编译时注解在每个ModuleXApplication类上标记，在编译时动态生成初始化的代码，该代码的作用是把所有的ModuleXApplication手
+    动创建并保存到集合中，并且在主Application中的生命周期方法中手动遍历集合去调用每个ModuleXApplication的方法。
+    如果组件是单独运行模式下，则直接在AndroidManifest文件中指定ModuleXApplication为运行时的Application，这样一来无论组件是在何种模式下，它的Application
+    可以认为都是ModuleXApplication
+
+三、组件间如何通信？
+
+四、如何获取到其他组件的View、Fragment？
+
+五、组件的资源命名规则
+
